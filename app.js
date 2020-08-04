@@ -1,31 +1,55 @@
 function onReady(){
-  const addToDoForm = document.getElementById('addToDoForm');
-  const newToDoText = document.getElementById('newToDoText');
-  const toDoList = document.getElementById('toDoList');
+  let todos = [];
+  let currentToDoId = 1;
+  const ADD_TODO_FORM = document.getElementById("addToDoForm");
+  const NEW_TODO_TEXT = document.getElementById("newToDoText");
+  const TODO_LIST = document.getElementById("toDoList");
 
-addToDoForm.addEventListener('submit', (event) => {
-event.preventDefault();
+  ADD_TODO_FORM.addEventListener('submit', (event) => {
+    event.preventDefault();
 
-let title = newToDoText.value;
+    let title = NEW_TODO_TEXT.value;
 
-let newLi = document.createElement('li');
-let checkbox = document.createElement('input');
-checkbox.type = "checkbox";
+    let todoObj = {
+      name: title,
+      id: currentToDoId
+    };
 
-let deleteBtn = document.createElement('button');
-deleteBtn.textContent = "Delete";
+    currentToDoId++;
 
-deleteBtn.addEventListener('click', function(event){
-toDoList.removeChild(this.parentElement);
-  })
+    todos.push(todoObj);
 
-newLi.textContent = title;
-newLi.appendChild(checkbox);
-newLi.appendChild(deleteBtn);
-toDoList.appendChild(newLi);
-newToDoText.value = '';
-});
-}
+    console.log(todos);
+
+    let newLi = document.createElement('li'); // <li></li>
+    newLi.textContent = title; // <li>Woo!</li>
+
+    let checkbox = document.createElement('input');
+    checkbox.type = "checkbox";
+
+    let deleteBtn = document.createElement('button');
+    deleteBtn.textContent = "Delete";
+
+
+    deleteBtn.addEventListener('click', function(event) {
+      let todoText = this.parentElement.childNodes[0].nodeValue;
+      todos.forEach(function(todoItem, index){
+        if(todoItem.name == todoText){
+          // delete that item
+          todos.splice(index, 1);
+        }
+        console.log(todos);
+      })
+      TODO_LIST.removeChild(this.parentElement);
+    });
+
+
+    newLi.appendChild(checkbox);
+    newLi.appendChild(deleteBtn);
+    TODO_LIST.appendChild(newLi);
+    NEW_TODO_TEXT.value = "";
+  });
+};
 
 window.onload = function() {
   onReady();
